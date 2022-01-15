@@ -1,0 +1,10 @@
+server:
+  # \u7AEF \u53E3
+  port: 8080
+  servlet:
+    context-path: /
+spring:
+  redis:
+    host: 8.129.184.128
+    port: 1288
+    password: chuzimi888
