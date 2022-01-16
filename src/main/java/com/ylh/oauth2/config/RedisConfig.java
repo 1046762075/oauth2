@@ -8,12 +8,13 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
+ * jwt之后取消这个配置
  * token存储到redis
  * @author 云裂痕
  * @email 1046762075@qq.com
  * @date 2022-01-15 21:30:57
  */
-@Configuration
+//@Configuration
 public class RedisConfig {
 
 	@Autowired

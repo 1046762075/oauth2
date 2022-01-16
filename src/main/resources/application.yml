@@ -1,5 +1,4 @@
 server:
-  # \u7AEF \u53E3
   port: 8080
   servlet:
     context-path: /
@@ -8,3 +7,16 @@ spring:
     host: 8.129.184.128
     port: 1288
     password: chuzimi888
+
+ylh:
+  jwt:
+    # 密钥
+    signKey: YLH
+    ID: 1046762075
+    subject: ${ylh.jwt.signKey}
+    secretKey: xxxx
+    exp: 1
+    refreshToken: 86400
+    claim:
+      key: name
+      value: ${ylh.jwt.signKey}
