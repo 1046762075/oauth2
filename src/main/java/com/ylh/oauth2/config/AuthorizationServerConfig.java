@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -34,6 +35,21 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Value("${ylh.jwt.refreshToken}")
 	private int refreshToken;
+
+	@Value("${oauth2.secret}")
+	private String secret;
+
+	@Value("${oauth2.client}")
+	private String client;
+
+	@Value("${oauth2.redirectUris}")
+	private String[] redirectUris;
+
+	@Value("${oauth2.scopes}")
+	private String scopes;
+
+	@Value("${oauth2.authorizedGrantTypes}")
+	private String[] authorizedGrantTypes;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -92,23 +108,34 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
 				// 客户端id
-				.withClient("client")
-				// 密钥
-				.secret(passwordEncoder.encode("123456"))
+				.withClient(client)
+				// 密钥 [与客户端的密钥一致]
+				.secret(passwordEncoder.encode(secret))
 				// 重定向地址
-				.redirectUris("http://www.baidu.com")
+				.redirectUris(redirectUris)
 				// 授权范围
-				.scopes("all")
+				.scopes(scopes)
 				// 有效期
 				.accessTokenValiditySeconds(exp * 60)
 				// 刷新令牌过期时间
 				.refreshTokenValiditySeconds(refreshToken)
+				// 单点登录自动授权
+				.autoApprove(true)
 				/**
 				 * 授权类型 [允许多种]
 				 * authorization_code：授权码模式
 				 * password：密码模式
 				 * refresh_token: 刷新令牌
 				 */
-				.authorizedGrantTypes("authorization_code", "password", "refresh_token");
+				.authorizedGrantTypes(authorizedGrantTypes);
+	}
+
+	/**
+	 * 配置单点登录
+	 */
+	@Override
+	public void configure(AuthorizationServerSecurityConfigurer security) {
+		// 获取密钥必须要身份认证
+		security.tokenKeyAccess("isAuthenticated()");
 	}
 }

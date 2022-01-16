@@ -1,0 +1,22 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /
+    session:
+      cookie:
+        name: OAUTH2-CLIENT-SESSIONID${server.port}
+
+oauth2:
+  server:
+    url: http://localhost:8080
+security:
+  oauth2:
+    client:
+      # 与服务器的id、密钥一致
+      client-id: client
+      client-secret: 123456
+      user-authorization-uri: ${oauth2.server.url}/oauth/authorize
+      access-token-uri: ${oauth2.server.url}/oauth/token
+    resource:
+      jwt:
+        key-uri: ${oauth2.server.url}/oauth/token_key

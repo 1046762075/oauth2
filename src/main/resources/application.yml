@@ -7,6 +7,16 @@ spring:
     host: 8.129.184.128
     port: 1288
     password: chuzimi888
+oauth2:
+  client: client
+  secret: 123456
+  # 非单点登录可以重定向到任意位置
+#  redirectUris: http:/地址/www.baidu.com
+  # 单点登录 重定向到客户端
+  redirectUris: http://localhost:8088/login,http://127.0.0.1:8088/login
+  scopes: all
+  # 认证类型
+  authorizedGrantTypes: authorization_code,password,refresh_token
 
 ylh:
   jwt:
